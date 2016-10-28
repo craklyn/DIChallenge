@@ -5,11 +5,40 @@ getRollProbs <- function(N=8, M = 24) {
   # Generate list of rolls of N dice that can sum to M
   
   # First, make list of all partitions of eight numbers that sum to M 
-  dicePartitions = restrictedparts(M, N, include.zero=FALSE)
+#  dicePartitions = restrictedparts(M, N, include.zero=FALSE)
+  
   # Since we want partitions that have at most six - corresponding to dice
   # with six sides - remove partitions that have entries larger than six.
-  goodRows = apply(dicePartitions, MARGIN = 2, function(x) max(x) <= 6)
-  dicePartitions = dicePartitions[,goodRows]
+#  goodRows = apply(dicePartitions, MARGIN = 2, function(x) max(x) <= 6)
+#  dicePartitions = dicePartitions[,goodRows]
+#  print("Dimension of old method:")
+#  print(dim(dicePartitions))
+  
+  
+  partition <- firstrestrictedpart(M, N, include.zero=FALSE)
+  if(N == 50 && M == 150) {
+    partition <- c(rep(6, 20), rep(1, 30))
+  }
+  dicePartitions = matrix(nrow = N, ncol = 0)
+  while(TRUE) {
+    if(max(partition) <= 6) {
+      dicePartitions = cbind(dicePartitions, partition)
+      print(partition)
+    }
+    
+    if(islastrestrictedpart(partition)) {
+      break
+    }
+    else {
+      partition <- nextrestrictedpart(partition)
+    }
+  }
+
+#  print("Final partition:")
+#  print(partition)
+#  print("Dimension of new method:")
+#  print(dim(dicePartitions))
+  
   
   # For any sequence of n elements, there are (n!) ways to arrange it.
   # For a sequence that contains identical subset of elements, the number of unique

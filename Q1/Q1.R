@@ -1,8 +1,9 @@
-setwd("~/Dropbox/Applications/Data Incubator/Challenge Problems")
+setwd("~/Dropbox/Applications/Data Incubator/Challenge Problems/Q1")
 options(digits=10)
 
 source("diceRoller.R")
 
+library(dice)
 getSumProbs(ndicePerRoll=8, nsidesPerDie=6)$probabilities[17,]
 # Result:
 #       Sum  Probability Ways to Roll
