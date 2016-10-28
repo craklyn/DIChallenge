@@ -70,6 +70,7 @@ getRollProbs <- function(N=8, M = 24) {
   }
   
   # Calculate the squared value of the standard deviation's denominator
+  # Calculation from https://en.wikipedia.org/wiki/Weighted_arithmetic_mean#Reliability_weights
   V1 = sum(probList)
   V2 = sum(probList^2)
   stdDevDenom2 = V1 - (V2/V1)
