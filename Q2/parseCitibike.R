@@ -1,12 +1,8 @@
+library(data.table)
+
 parseTable <- function(fileName) {
-  
   # Begin by processing data like this blog does:
   # http://faculty.baruch.cuny.edu/smanzan/AEDR/_book/citibike-trips.html
-  
-#  data <- fread("~/Documents/DIdata/Q2/201510-citibike-tripdata.csv", 
-#                header=TRUE, showProgress=TRUE, 
-#                stringsAsFactors=FALSE, data.table = FALSE)  
-
   data <- fread(fileName, header=TRUE, showProgress = FALSE, 
                 stringsAsFactors = FALSE, data.table = FALSE)
   
@@ -17,11 +13,18 @@ parseTable <- function(fileName) {
   data$tripduration <- as.integer(data$tripduration)
   data$birth.year <- as.integer(data$birth.year)
   data$bikeid <- as.integer(data$bikeid)
+  data$start.station.id <- as.integer(data$start.station.id)
+  data$end.station.id <- as.integer(data$end.station.id)
   # Repeat same approach to some other data types:
   data$usertype   <- as.factor(data$usertype)
   # Gender (Zero=unknown; 1=male; 2=female)
   data$gender     <- as.factor(data$gender)
   levels(data$gender) <- c("UNKNOWN", "MALE", "FEMALE")
+  
+  data$start.station.latitude  <- as.numeric(data$start.station.latitude)*(pi/180)
+  data$start.station.longitude <- as.numeric(data$start.station.longitude)*(pi/180)
+  data$end.station.latitude  <- as.numeric(data$end.station.latitude)*(pi/180)
+  data$end.station.longitude <- as.numeric(data$end.station.longitude)*(pi/180)
   
   require(lubridate)
   

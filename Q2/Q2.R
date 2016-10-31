@@ -1,3 +1,4 @@
+
 setwd("/Users/danielrb/Dropbox/Applications/Data Incubator/Challenge Problems/Q2")
 source("parseCitibike.R")
 
@@ -5,8 +6,9 @@ source("parseCitibike.R")
 setwd("~/Documents/DIdata/Q2")
 options(digits=10)
 
-fileData <- list()
 
+# Okay, let's load all the data up and put it into the dataframe "allData"
+fileData <- list()
 for (month in 1:12) {
   fileName <- sprintf("2015%02d-citibike-tripdata", month)
 #  download.file(paste0("https://s3.amazonaws.com/tripdata/",fileName,".zip"), paste0("./",fileName,".zip"))
@@ -61,9 +63,40 @@ for (i in 1:length(bikeIDs)) {
 bikesNstationsVisitedStdDev <- sd(bikeNstationsVisited)
 print(paste("StdDev of number of stations visited:", bikesNstationsVisitedStdDev))
 
+
+
+
 # What is the average length, in kilometers, of a trip? Assume trips follow great 
 # circle arcs from the start station to the end station. Ignore trips that start 
 # and end at the same station, as well as those with obviously wrong data.
+
+# Use the form of the great-circle equation that's well-behaved for 
+# short distances due to use of the haversine formula:
+allData$deltaPhi <- allData$start.station.latitude - allData$end.station.latitude
+allData$cosPhi1 <- cos(allData$start.station.latitude)
+allData$cosPhi2 <- cos(allData$end.station.latitude)
+allData$deltaLambda <- allData$start.station.longitude - allData$end.station.longitude
+
+allData$deltaSigma <- 2*asin(sqrt(sin(allData$deltaPhi/2)^2) + 
+                                allData$cosPhi1*allData$cosPhi2*(sin(allData$deltaLambda/2)^2))
+# Treat earth radius as 6371km, as per recommendation of:
+# https://en.wikipedia.org/wiki/Great-circle_distance#Radius_for_spherical_Earth
+allData$dist <- 6371 * allData$deltaSigma
+
+# Remove trips that have the same start and end location
+# Assume trips longer than 24 hours are obviously wrong
+# Assume trips shorter than 1 meter are obviously wrong
+# (Not assuming very small trips, like those seen with valets, are in error.)
+goodDistData <- allData[-which(allData$start.station.id == allData$end.station.id |
+                               allData$tripduration > 24*60*60 |
+                               allData$dist < 0.001),]
+nrow(allData) - nrow(goodDistData)
+
+print("The mean (great circle) distance travelled of good trips is:")
+print(mean(goodDistData$dist))
+
+# Result:
+# [1] 1.344494719
 
 
 
@@ -110,13 +143,14 @@ usageRatios <- c()
 for(i in 1:length(stationIDs)) {
   for(j in 1:24) {
     ratio <- perStationUsage[[i]][j] / overallUsage[j]
-    print(ratio)
     usageRatios[(i-1)*24 + j] <- ratio
   }
 }
 
-length(usageRatios)
-
+print("The maximum ratio of station hourly usage to overall hourly usage is:")
+print(max(usageRatios))
+# Result:
+# 11.42168405
 
 
 # There are two types of riders: "Customers" and "Subscribers." Customers buy 
