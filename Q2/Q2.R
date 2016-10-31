@@ -32,12 +32,19 @@ fileData <- NULL
 medianTripDuration <- median(allData$tripduration)
 print(paste("Median trip duration", medianTripDuration))
 
+# Result:
+# [1] 629
+
 
 # What fraction of rides start and end at the same station?
 stationStartEndIsSame <- table((allData$start.station.id == allData$end.station.id))
 numStartEndIsSame <- stationStartEndIsSame[names(stationStartEndIsSame)==TRUE]
 fractionStartEndIsSame <- numStartEndIsSame / length(allData$start.station.id)
 print(paste("Fraction of rides start and end at the station:", fractionStartEndIsSame))
+print(fractionStartEndIsSame)
+
+# Result:
+# 0.02235839134
 
 
 # We say a bike has visited a station if it has a ride that either started 
@@ -62,8 +69,10 @@ for (i in 1:length(bikeIDs)) {
 
 bikesNstationsVisitedStdDev <- sd(bikeNstationsVisited)
 print(paste("StdDev of number of stations visited:", bikesNstationsVisitedStdDev))
+print(bikesNstationsVisitedStdDev)
 
-
+# Result:
+# 54.54511387
 
 
 # What is the average length, in kilometers, of a trip? Assume trips follow great 
@@ -111,7 +120,10 @@ for(month in 1:12) {
 }
 diffOfAvgDur <- range(tripDur)[2] - range(tripDur)[1]
 print(paste("Difference between longest and shortest monthly avg duration:",diffOfAvgDur))
+print(diffOfAvgDur)
 
+# Result:
+# [1] 430.5702960
 
 
 # Let us define the hourly usage fraction of a station to be the fraction of 
@@ -168,6 +180,10 @@ numExceed <- sum((allData[subscribers,])$tripduration > subscrTimeLimit) +
 
 fractionExceed <- numExceed / nrow(allData)
 print(paste("Fraction of riders exceeding their time limit:",fractionExceed))
+print(fractionExceed)
+
+# Result:
+# 0.03810678017
 
 
 # Most of the time, a bike will begin a trip at the same station where its 
