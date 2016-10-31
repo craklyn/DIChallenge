@@ -16,6 +16,7 @@ parseTable <- function(fileName) {
   # Change the columns to more appropriate data types
   data$tripduration <- as.integer(data$tripduration)
   data$birth.year <- as.integer(data$birth.year)
+  data$bikeid <- as.integer(data$bikeid)
   # Repeat same approach to some other data types:
   data$usertype   <- as.factor(data$usertype)
   # Gender (Zero=unknown; 1=male; 2=female)
