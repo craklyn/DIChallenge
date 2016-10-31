@@ -1,7 +1,9 @@
 # Try to generate sum and product recursively
 
-N = 8
-M = 24
+#N = 8
+#M = 24
+N = 50
+M = 150
 
 
 # format: list(sum) -> list(product) -> value (multiplicity)
@@ -16,6 +18,7 @@ for(counter in 2:N) {
   
   # New list sum max is 6 greater htan previous, but no need to consider sums greater than M
   newSumMax <- min(length(prevMatrix)+6, M)
+#  newSumMax <- length(prevMatrix)+6
   
   newMatrix <- list()
   for(i in 1:newSumMax) {
@@ -59,7 +62,7 @@ for(counter in 2:N) {
           }
           
           if(newMatrix[[newSum]][[i]][1] == newProd) {
-            newMatrix[[newSum]][[i]][2] = newMatrix[[newSum]][[i]][2] + 1
+            newMatrix[[newSum]][[i]][2] = newMatrix[[newSum]][[i]][2] + curMulti
             found <- TRUE
             break
           }
@@ -68,7 +71,7 @@ for(counter in 2:N) {
 #          print("debug a")
           pos <- length(newMatrix[[newSum]]) + 1
 #          print("debug b")
-          newMatrix[[newSum]][[pos]] <- c(newProd, 1)
+          newMatrix[[newSum]][[pos]] <- c(newProd, curMulti)
         }
       }
     }
@@ -76,3 +79,22 @@ for(counter in 2:N) {
 
   prevMatrix <- newMatrix 
 }
+
+values  <- c()
+weights <- c()
+result <- prevMatrix[[M]]
+for(i in 1:length(result)) {
+  values[i]  <- result[[i]][1]
+  weights[i] <- result[[i]][2]
+}
+
+result <- rep(values, weights)
+print("Mean:")
+print(mean(result))
+print("StdDev:")
+print(sd(result))
+
+
+#print(sum(values * weights) / sum(weights))
+
+
