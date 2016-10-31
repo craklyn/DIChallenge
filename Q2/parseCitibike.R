@@ -29,30 +29,6 @@ parseTable <- function(fileName) {
   require(lubridate)
   
   # Sigh, this date data is pretty badly formed.  Let's clean it up...
-#  for(row in 1:nrow(data)) {
-#    if(row %% 50000 == 0) {
-#      print(paste0("Processing row #",row))
-#    }
-#    
-#    # First: Starttime
-#    pos = regexpr(' ', data$starttime[row])
-#    date = substr(data$starttime[row], 0, pos-1)
-#    time = substr(data$starttime[row], pos+1, nchar(data$starttime[row]))
-#    if(nchar(time) == 4) {
-#      time = paste0("0",time)
-#      data$starttime[row] = paste0(date, " ", time)
-#    }
-#    
-#    # Second: endtime
-#    pos = regexpr(' ', data$stoptime[row])
-#    date = substr(data$stoptime[row], 0, pos-1)
-#    time = substr(data$stoptime[row], pos+1, nchar(data$stoptime[row]))
-#    if(nchar(time) == 4) {
-#      time = paste0("0",time)
-#      data$stoptime[row] = paste0(date, " ", time)
-#    }
-#  }
-
   # Count number of colons to decide if the time is Hour-Minute-Second or Hour-Minute.
   nColons <- nchar(data$starttime[1]) - nchar(gsub(":","",data$starttime[1]))
   if(nColons == 2) {
